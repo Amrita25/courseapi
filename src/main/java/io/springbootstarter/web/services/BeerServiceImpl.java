@@ -14,14 +14,12 @@ public class BeerServiceImpl implements BeerService{
 		return new BeerDto(UUID.randomUUID(),"CalsBerg","Strong",1L);
 	}
 
-	@Override
 	public BeerDto saveNewBeer(BeerDto beerDto) {
 		// TODO Auto-generated method stub
 		beerDto.setId(UUID.randomUUID());
 		return beerDto;
 	}
 
-	@Override
 	public BeerDto updateBeer(UUID beerID,BeerDto beerDto) {
 		// TODO Auto-generated method stub
 		return null;

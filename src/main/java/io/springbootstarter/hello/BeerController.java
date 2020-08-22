@@ -47,7 +47,7 @@ public class BeerController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Location", brDto.getId().toString());
 		
-		return new ResponseEntity<>(headers, HttpStatus.CREATED);
+		return new ResponseEntity<BeerDto>(headers, HttpStatus.CREATED);
 		
 	}
 	
@@ -55,7 +55,7 @@ public class BeerController {
 	public ResponseEntity<BeerDto> handleUpdate(@PathVariable("beerID") UUID beerID,@RequestBody BeerDto beerDto){
 		BeerDto brDto =beerService.updateBeer(beerID,beerDto);
 		System.out.println("inside update service");
-		return new ResponseEntity<>( HttpStatus.NO_CONTENT);
+		return new ResponseEntity<BeerDto>( HttpStatus.NO_CONTENT);
 		
 	}
 	

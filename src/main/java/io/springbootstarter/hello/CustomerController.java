@@ -42,7 +42,7 @@ public class CustomerController {
  		HttpHeaders headers = new HttpHeaders();
  		headers.add("Location", cust.getId().toString());
  		System.out.println("inside handlePost Customer");
- 		return new ResponseEntity<>(headers, HttpStatus.CREATED);
+ 		return new ResponseEntity<BeerDto>(headers, HttpStatus.CREATED);
  		
  	}
  	
@@ -50,7 +50,7 @@ public class CustomerController {
  	public ResponseEntity<BeerDto> handleUpdate(@PathVariable("custID") UUID custID,@RequestBody Customer customer){
  		Customer cust =custService.updateCustomer(custID,customer);
  		System.out.println("inside handlePut Customer");
- 		return new ResponseEntity<>( HttpStatus.NO_CONTENT);
+ 		return new ResponseEntity<BeerDto>( HttpStatus.NO_CONTENT);
  		
  	}
 
