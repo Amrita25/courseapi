@@ -2,8 +2,15 @@ package io.springbootstarter.web.model;
 
 import java.util.UUID;
 
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 public class Customer {
 	private UUID id ;
+	
+	@NotBlank
+	@Size(min=3,max=10)
 	private String name;
 	
 	public Customer() {
