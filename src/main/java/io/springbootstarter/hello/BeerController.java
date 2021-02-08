@@ -1,6 +1,8 @@
 package io.springbootstarter.hello;
 
+import io.springbootstarter.exception.BeerNotFoundException;
 import io.springbootstarter.web.model.BeerDto;
+import io.springbootstarter.web.model.MyError;
 import io.springbootstarter.web.services.BeerService;
 import io.springbootstarter.web.services.BeerServiceImpl;
 
@@ -44,12 +46,17 @@ public class BeerController {
 	@GetMapping({"/{brID}"})
 	public ResponseEntity<BeerDto> getBeer(@PathVariable("brID") UUID beerID){
 		System.out.println("inside");
+		BeerDto dto=beerService.getBeerById(beerID);
+		//dto=null;
+		if(dto==null){
+			throw new BeerNotFoundException(beerID);
+		}
 		return new ResponseEntity<BeerDto>(beerService.getBeerById(beerID),HttpStatus.OK);
 		
 	}
 	
 	@PostMapping
-	public ResponseEntity<BeerDto> handlePost(@Valid @RequestBody BeerDto beerDto){
+	public ResponseEntity<BeerDto> handlePost( @RequestBody BeerDto beerDto){
 		BeerDto brDto =beerService.saveNewBeer(beerDto);
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Location", brDto.getId().toString());
@@ -59,11 +66,10 @@ public class BeerController {
 	}
 	
 	@PutMapping({"/{beerID}"})
-	public ResponseEntity<BeerDto> handleUpdate(@PathVariable("beerID") UUID beerID,@Valid @RequestBody BeerDto beerDto){
+	public ResponseEntity<BeerDto> handleUpdate(@PathVariable("beerID") UUID beerID, @RequestBody BeerDto beerDto){
 		BeerDto brDto =beerService.updateBeer(beerID,beerDto);
 		System.out.println("inside update service");
 		return new ResponseEntity<BeerDto>( HttpStatus.NO_CONTENT);
-		
 	}
 	
 	@ExceptionHandler(ConstraintViolationException.class)
@@ -74,5 +80,10 @@ public class BeerController {
 			errors.add( cons.getPropertyPath()+" : "+cons.getMessage());
 		}
 		return new ResponseEntity<List>(errors,HttpStatus.BAD_REQUEST);
+	}
+	@ExceptionHandler(BeerNotFoundException.class)
+	public ResponseEntity<MyError> beerNotFound(BeerNotFoundException ex){
+		MyError error = new MyError(ex.getBeerID(),"beer with beerID "+ex.getBeerID()+" Not Found !!");
+		return new ResponseEntity<MyError>(error,HttpStatus.NOT_FOUND);
 	}
 }
